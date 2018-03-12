@@ -8,6 +8,7 @@ const {
   NativeModules,
 } = ReactNative;
 const { RNHzAds } = NativeModules;
+console.log(NativeModules);
 
 const g_eventEmitter = new EventEmitter();
 const g_hzEventEmitter = new NativeEventEmitter(RNHzAds);
@@ -30,7 +31,7 @@ function init(publisherId,done) {
   if (!done) {
     done = function() {};
   }
-  RNHzAds.init(publisherId,done);
+  RNHzAds.initWithPublisherID(publisherId,done);
 }
 
 const getStatus = RNHzAds.getStatus;

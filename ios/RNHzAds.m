@@ -11,13 +11,13 @@
 {
   bool _hasListeners;
 }
+RCT_EXPORT_MODULE();
 
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }
 
-- (dispatch_queue_t)methodQueue
-{
+- (dispatch_queue_t)methodQueue {
   return dispatch_get_main_queue();
 }
 
@@ -104,7 +104,7 @@ RCT_EXPORT_METHOD(fetchVideoAd:(RCTResponseSenderBlock)callback) {
   }];
 }
 
-RCT_EXPORT_METHOD(isVideodAvailable:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(isVideoAvailable:(RCTResponseSenderBlock)callback) {
   callback(@[[NSNull null],@([HZVideoAd isAvailable])]);
 }
 

@@ -8,7 +8,6 @@ const {
   NativeModules,
 } = ReactNative;
 const { RNHzAds } = NativeModules;
-console.log(NativeModules);
 
 const g_eventEmitter = new EventEmitter();
 const g_hzEventEmitter = new NativeEventEmitter(RNHzAds);

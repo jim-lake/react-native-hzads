@@ -3,7 +3,7 @@
 #import <React/RCTEventEmitter.h>
 #import <HeyzapAds/HeyzapAds.h>
 
-@interface RNHzAds : RCTEventEmitter <RCTBridgeModule>
+@interface RNHzAds : RCTEventEmitter <RCTBridgeModule,HZIncentivizedAdDelegate>
 
 @end
 
@@ -94,7 +94,7 @@ RCT_EXPORT_METHOD(showInterstitial:(RCTResponseSenderBlock)callback) {
   }
 }
 
-RCT_EXPORT_METHOD(fetchVideoAd:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(fetchVideo:(RCTResponseSenderBlock)callback) {
   [HZVideoAd fetchWithCompletion:^(BOOL result, NSError *error) {
     if (result) {
       callback(@[[NSNull null]]);
@@ -108,7 +108,7 @@ RCT_EXPORT_METHOD(isVideoAvailable:(RCTResponseSenderBlock)callback) {
   callback(@[[NSNull null],@([HZVideoAd isAvailable])]);
 }
 
-RCT_EXPORT_METHOD(showVideoAd:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(showVideo:(RCTResponseSenderBlock)callback) {
   if ([HZVideoAd isAvailable]) {
     [HZVideoAd showForTag:@"default" completion:^(BOOL result, NSError *error) {
       if (result) {
@@ -138,11 +138,26 @@ RCT_EXPORT_METHOD(isIncentivizedAdAvailable:(RCTResponseSenderBlock)callback) {
 
 RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
   if ([HZIncentivizedAd isAvailable]) {
-    [HZIncentivizedAd show];
-    callback(@[[NSNull null]]);
+    HZShowOptions *options = [HZShowOptions new];
+    options.completion = ^(BOOL result, NSError *error) {
+      if (result) {
+        callback(@[[NSNull null]]);
+      } else {
+        callback(@[error]);
+      }
+    };
+    [HZIncentivizedAd showWithOptions:options];
   } else {
     callback(@[@"no_incentivized_ad_available"]);
   }
+}
+
+- (void)didCompleteAdWithTag:(NSString *)tag {
+  [self sendEvent:@"AdComplete" body:tag];
+}
+
+- (void)didFailToCompleteAdWithTag:(NSString *)tag {
+  [self sendEvent:@"AdFail" body:tag];
 }
 
 @end

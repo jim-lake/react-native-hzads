@@ -28,9 +28,10 @@ android {
 
 repositories {
     mavenCentral()
+    flatDir { dirs "libs" }
 }
 
 dependencies {
+    compile files('libs/heyzap-ads-sdk-9.17.1.jar')
     compile 'com.facebook.react:react-native:+'
 }
-  

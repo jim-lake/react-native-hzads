@@ -3,7 +3,7 @@
 #import <React/RCTEventEmitter.h>
 #import <HeyzapAds/HeyzapAds.h>
 
-@interface RNHzAds : RCTEventEmitter <RCTBridgeModule,HZIncentivizedAdDelegate>
+@interface RNHzAds : RCTEventEmitter <RCTBridgeModule,HZIncentivizedAdDelegate,HZAdsDelegate>
 
 @end
 
@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE();
   return @[@"HzEvent"];
 }
 
-- (void)sendEvent:(NSString *)name body:(NSString *)body {
+- (void)sendEvent:(NSString *)name body:(NSDictionary *)body {
   if (_hasListeners && super.bridge != nil) {
     [self sendEventWithName:@"HzEvent" body:@{@"name": name, @"body": body}];
   }
@@ -62,6 +62,9 @@ RCT_EXPORT_METHOD(initWithPublisherID:(NSString *)publisherId
 
   [HeyzapAds startWithPublisherID:publisherId];
   if ([HeyzapAds isStarted]) {
+    [HZInterstitialAd setDelegate:self];
+    [HZVideoAd setDelegate:self];
+    [HZIncentivizedAd setDelegate:self];
     callback(@[[NSNull null],[self getStatus]]);
   } else {
     callback(@[@"start_failed"]);
@@ -85,8 +88,10 @@ RCT_EXPORT_METHOD(showInterstitial:(RCTResponseSenderBlock)callback) {
     [HZInterstitialAd showForTag:@"default" completion:^(BOOL result,NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);
-      } else {
+      } else if (error != nil) {
         callback(@[error]);
+      } else {
+        callback(@[@"completion_failure"]);
       }
     }];
   } else {
@@ -98,8 +103,10 @@ RCT_EXPORT_METHOD(fetchVideo:(RCTResponseSenderBlock)callback) {
   [HZVideoAd fetchWithCompletion:^(BOOL result, NSError *error) {
     if (result) {
       callback(@[[NSNull null]]);
-    } else {
+    } else if (error != nil) {
       callback(@[error]);
+    } else {
+      callback(@[@"completion_failure"]);
     }
   }];
 }
@@ -113,8 +120,10 @@ RCT_EXPORT_METHOD(showVideo:(RCTResponseSenderBlock)callback) {
     [HZVideoAd showForTag:@"default" completion:^(BOOL result, NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);
-      } else {
+      } else if (error != nil) {
         callback(@[error]);
+      } else {
+        callback(@[@"completion_failure"]);
       }
     }];
   } else {
@@ -126,8 +135,10 @@ RCT_EXPORT_METHOD(fetchIncentivizedAd:(RCTResponseSenderBlock)callback) {
   [HZIncentivizedAd fetchWithCompletion:^(BOOL result, NSError *error) {
     if (result) {
       callback(@[[NSNull null]]);
-    } else {
+    } else if (error != nil) {
       callback(@[error]);
+    } else {
+      callback(@[@"completion_failure"]);
     }
   }];
 }
@@ -142,8 +153,10 @@ RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
     options.completion = ^(BOOL result, NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);
-      } else {
+      } else if (error != nil) {
         callback(@[error]);
+      } else {
+        callback(@[@"completion_failure"]);
       }
     };
     [HZIncentivizedAd showWithOptions:options];
@@ -152,12 +165,40 @@ RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
   }
 }
 
-- (void)didCompleteAdWithTag:(NSString *)tag {
-  [self sendEvent:@"AdComplete" body:tag];
+- (void)didShowAdWithTag:(NSString *)tag {
+  [self sendEvent:@"ShowAd" body:@{ @"tag": tag,}];
 }
-
+- (void)didFailToShowAdWithTag:(NSString *)tag andError:(NSError *)error {
+  NSMutableDictionary *body = [NSMutableDictionary new];
+  [body setObject:tag forKey:@"tag"];
+  if (error) {
+    [body setObject:error forKey:@"error"];
+  }
+  [self sendEvent:@"ShowFail" body:body];
+}
+- (void)didReceiveAdWithTag:(NSString *)tag {
+  [self sendEvent:@"RecieveAd" body:@{ @"tag": tag, }];
+}
+- (void)didFailToReceiveAdWithTag:(NSString *)tag {
+  [self sendEvent:@"RecieveFail" body:@{ @"tag": tag }];
+}
+- (void)didClickAdWithTag:(NSString *)tag {
+  [self sendEvent:@"ClickAd" body:@{ @"tag": tag }];
+}
+- (void)didHideAdWithTag:(NSString *)tag {
+  [self sendEvent:@"HideAd" body:@{ @"tag": tag }];
+}
+- (void)willStartAudio {
+  [self sendEvent:@"Audio" body:@{ @"reason": @"StartAudio" }];
+}
+- (void) didFinishAudio {
+  [self sendEvent:@"Audio" body:@{ @"reason": @"FinishAudio" }];
+}
+- (void)didCompleteAdWithTag:(NSString *)tag {
+  [self sendEvent:@"AdComplete" body:@{ @"tag": tag }];
+}
 - (void)didFailToCompleteAdWithTag:(NSString *)tag {
-  [self sendEvent:@"AdFail" body:tag];
+  [self sendEvent:@"AdFail" body:@{ @"tag": tag }];
 }
 
 @end

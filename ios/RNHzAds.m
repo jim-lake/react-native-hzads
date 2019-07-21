@@ -52,7 +52,6 @@ RCT_EXPORT_MODULE();
     @"isAdMobInitiailized": @([HeyzapAds isNetworkInitialized:HZNetworkAdMob]),
     @"isHyprMXInitiailized": @([HeyzapAds isNetworkInitialized:HZNetworkHyprMX]),
     @"isHeyzapExchangeInitiailized": @([HeyzapAds isNetworkInitialized:HZNetworkHeyzapExchange]),
-    @"isLeadboltInitiailized": @([HeyzapAds isNetworkInitialized:HZNetworkLeadbolt]),
     @"isInMobiInitiailized": @([HeyzapAds isNetworkInitialized:HZNetworkInMobi]),
   };
 }
@@ -80,12 +79,17 @@ RCT_EXPORT_METHOD(showDebugPanel) {
 }
 
 RCT_EXPORT_METHOD(isInterstitialAvailable:(RCTResponseSenderBlock)callback) {
-  callback(@[[NSNull null],@([HZInterstitialAd isAvailable])]);
+  [self isInterstitialAvailableForTag:@"default" callback:callback];
 }
-
+RCT_EXPORT_METHOD(isInterstitialAvailableForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+  callback(@[[NSNull null],@([HZInterstitialAd isAvailableForTag:tag])]);
+}
 RCT_EXPORT_METHOD(showInterstitial:(RCTResponseSenderBlock)callback) {
+  [self showInterstitialForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(showInterstitialForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
   if ([HZInterstitialAd isAvailable]) {
-    [HZInterstitialAd showForTag:@"default" completion:^(BOOL result,NSError *error) {
+    [HZInterstitialAd showForTag:tag completion:^(BOOL result,NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);
       } else if (error != nil) {
@@ -98,9 +102,11 @@ RCT_EXPORT_METHOD(showInterstitial:(RCTResponseSenderBlock)callback) {
     callback(@[@"no_interstitial_available"]);
   }
 }
-
 RCT_EXPORT_METHOD(fetchVideo:(RCTResponseSenderBlock)callback) {
-  [HZVideoAd fetchWithCompletion:^(BOOL result, NSError *error) {
+  [self fetchVideoForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(fetchVideoForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+  [HZVideoAd fetchForTag:tag withCompletion:^(BOOL result, NSError *error) {
     if (result) {
       callback(@[[NSNull null]]);
     } else if (error != nil) {
@@ -112,10 +118,16 @@ RCT_EXPORT_METHOD(fetchVideo:(RCTResponseSenderBlock)callback) {
 }
 
 RCT_EXPORT_METHOD(isVideoAvailable:(RCTResponseSenderBlock)callback) {
-  callback(@[[NSNull null],@([HZVideoAd isAvailable])]);
+  [self isVideoAvailableForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(isVideoAvailableForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+  callback(@[[NSNull null],@([HZVideoAd isAvailableForTag:tag])]);
 }
 
 RCT_EXPORT_METHOD(showVideo:(RCTResponseSenderBlock)callback) {
+  [self showVideoForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(showVideoForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
   if ([HZVideoAd isAvailable]) {
     [HZVideoAd showForTag:@"default" completion:^(BOOL result, NSError *error) {
       if (result) {
@@ -130,9 +142,11 @@ RCT_EXPORT_METHOD(showVideo:(RCTResponseSenderBlock)callback) {
     callback(@[@"no_video_available"]);
   }
 }
-
 RCT_EXPORT_METHOD(fetchIncentivizedAd:(RCTResponseSenderBlock)callback) {
-  [HZIncentivizedAd fetchWithCompletion:^(BOOL result, NSError *error) {
+  [self fetchIncentivizedAdForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(fetchIncentivizedAdForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+  [HZIncentivizedAd fetchForTag:tag withCompletion:^(BOOL result, NSError *error) {
     if (result) {
       callback(@[[NSNull null]]);
     } else if (error != nil) {
@@ -142,12 +156,17 @@ RCT_EXPORT_METHOD(fetchIncentivizedAd:(RCTResponseSenderBlock)callback) {
     }
   }];
 }
-
 RCT_EXPORT_METHOD(isIncentivizedAdAvailable:(RCTResponseSenderBlock)callback) {
-  callback(@[[NSNull null],@([HZIncentivizedAd isAvailable])]);
+  [self isIncentivizedAdAvailableForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(isIncentivizedAdAvailableForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+  callback(@[[NSNull null],@([HZIncentivizedAd isAvailableForTag:tag])]);
 }
 
 RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
+  [self showInterstitialForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(showIncentivizedAdForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
   if ([HZIncentivizedAd isAvailable]) {
     HZShowOptions *options = [HZShowOptions new];
     options.completion = ^(BOOL result, NSError *error) {

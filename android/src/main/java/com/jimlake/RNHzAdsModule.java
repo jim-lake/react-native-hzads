@@ -1,6 +1,6 @@
 package com.jimlake;
 
-import android.support.annotation.Nullable;
+import javax.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -132,30 +132,49 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void isInterstitialAvailable(final Callback callback) {
-    callback.invoke((Object)null,InterstitialAd.isAvailable());
+    this.isInterstitialAvailableForTag("default",callback);
   }
-
   @ReactMethod
-  public void showInterstitial(final Callback callback) {
-    InterstitialAd.display(getCurrentActivity());
+  public void isInterstitialAvailableForTag(final String tag,final Callback callback) {
+    callback.invoke((Object)null,InterstitialAd.isAvailable(tag));
+  }
+  @ReactMethod
+  public void showInterstitial(final String tag,final Callback callback) {
+    this.showInterstitialForTag("default",callback);
+  }
+  @ReactMethod
+  public void showInterstitialForTag(final String tag,final Callback callback) {
+    InterstitialAd.display(getCurrentActivity(),tag);
     callback.invoke((Object)null);
   }
 
   @ReactMethod
   public void fetchVideo(final Callback callback) {
-    VideoAd.fetch();
+    this.fetchVideoForTag("default",callback);
+  }
+  @ReactMethod
+  public void fetchVideoForTag(final String tag,final Callback callback) {
+    VideoAd.fetch(tag);
     callback.invoke((Object)null);
   }
 
   @ReactMethod
   public void isVideoAvailable(final Callback callback) {
-    callback.invoke((Object)null,VideoAd.isAvailable());
+    this.isVideoAvailableForTag("default",callback);
+  }
+  @ReactMethod
+  public void isVideoAvailableForTag(final String tag,final Callback callback) {
+    callback.invoke((Object)null,VideoAd.isAvailable(tag));
   }
 
   @ReactMethod
   public void showVideo(final Callback callback) {
-    if (VideoAd.isAvailable()) {
-      VideoAd.display(getCurrentActivity());
+    this.showVideoForTag("default",callback);
+  }
+  @ReactMethod
+  public void showVideoForTag(final String tag,final Callback callback) {
+    if (VideoAd.isAvailable(tag)) {
+      VideoAd.display(getCurrentActivity(),tag);
       callback.invoke((Object)null);
     } else {
       callback.invoke("no_video_available");
@@ -164,19 +183,31 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void fetchIncentivizedAd(final Callback callback) {
-    IncentivizedAd.fetch();
+    this.fetchIncentivizedAdForTag("default",callback);
+  }
+  @ReactMethod
+  public void fetchIncentivizedAdForTag(final String tag,final Callback callback) {
+    IncentivizedAd.fetch(tag);
     callback.invoke((Object)null);
   }
 
   @ReactMethod
   public void isIncentivizedAdAvailable(final Callback callback) {
-    callback.invoke((Object)null,IncentivizedAd.isAvailable());
+    this.isIncentivizedAdAvailableForTag("default",callback);
+  }
+  @ReactMethod
+  public void isIncentivizedAdAvailableForTag(final String tag,final Callback callback) {
+    callback.invoke((Object)null,IncentivizedAd.isAvailable(tag));
   }
 
   @ReactMethod
   public void showIncentivizedAd(final Callback callback) {
-    if (IncentivizedAd.isAvailable()) {
-      IncentivizedAd.display(getCurrentActivity());
+    this.showIncentivizedAdForTag("default",callback);
+  }
+  @ReactMethod
+  public void showIncentivizedAdForTag(final String tag,final Callback callback) {
+    if (IncentivizedAd.isAvailable(tag)) {
+      IncentivizedAd.display(getCurrentActivity(),tag);
       callback.invoke((Object)null);
     } else {
       callback.invoke("no_incentivized_ad_available");

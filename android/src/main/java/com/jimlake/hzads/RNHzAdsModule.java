@@ -1,4 +1,4 @@
-package com.jimlake;
+package com.jimlake.hzads;
 
 import javax.annotation.Nullable;
 

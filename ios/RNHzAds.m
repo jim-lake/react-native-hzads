@@ -88,7 +88,7 @@ RCT_EXPORT_METHOD(showInterstitial:(RCTResponseSenderBlock)callback) {
   [self showInterstitialForTag:@"default" callback:callback];
 }
 RCT_EXPORT_METHOD(showInterstitialForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
-  if ([HZInterstitialAd isAvailable]) {
+  if ([HZInterstitialAd isAvailableForTag:tag]) {
     [HZInterstitialAd showForTag:tag completion:^(BOOL result,NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);
@@ -164,12 +164,13 @@ RCT_EXPORT_METHOD(isIncentivizedAdAvailableForTag:(NSString *)tag callback:(RCTR
 }
 
 RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
-  [self showIncentivizedAdForTag:@"default" callback:callback];
+  [self showIncentivizedAdForTag:@"default" incentivizedInfo:nil callback:callback];
 }
-RCT_EXPORT_METHOD(showIncentivizedAdForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(showIncentivizedAdForTag:(NSString *)tag incentivizedInfo:(NSString *)info callback:(RCTResponseSenderBlock)callback) {
   if ([HZIncentivizedAd isAvailableForTag:tag]) {
     HZShowOptions *options = [HZShowOptions new];
     options.tag = tag;
+    options.incentivizedInfo = info;
     options.completion = ^(BOOL result, NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);

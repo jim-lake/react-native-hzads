@@ -164,7 +164,7 @@ RCT_EXPORT_METHOD(isIncentivizedAdAvailableForTag:(NSString *)tag callback:(RCTR
 }
 
 RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
-  [self showIncentivizedAd:@"default" callback:callback];
+  [self showIncentivizedAdForTag:@"default" callback:callback];
 }
 RCT_EXPORT_METHOD(showIncentivizedAdForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
   if ([HZIncentivizedAd isAvailableForTag:tag]) {

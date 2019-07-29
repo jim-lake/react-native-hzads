@@ -164,11 +164,12 @@ RCT_EXPORT_METHOD(isIncentivizedAdAvailableForTag:(NSString *)tag callback:(RCTR
 }
 
 RCT_EXPORT_METHOD(showIncentivizedAd:(RCTResponseSenderBlock)callback) {
-  [self showInterstitialForTag:@"default" callback:callback];
+  [self showIncentivizedAd:@"default" callback:callback];
 }
 RCT_EXPORT_METHOD(showIncentivizedAdForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
-  if ([HZIncentivizedAd isAvailable]) {
+  if ([HZIncentivizedAd isAvailableForTag:tag]) {
     HZShowOptions *options = [HZShowOptions new];
+    options.tag = tag;
     options.completion = ^(BOOL result, NSError *error) {
       if (result) {
         callback(@[[NSNull null]]);

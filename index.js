@@ -4,17 +4,25 @@ import ReactNative from 'react-native';
 import EventEmitter from 'events';
 
 const {
+  Platform,
+  DeviceEventEmitter,
   NativeEventEmitter,
   NativeModules,
 } = ReactNative;
 const { RNHzAds } = NativeModules;
 
 const g_eventEmitter = new EventEmitter();
-const g_hzEventEmitter = new NativeEventEmitter(RNHzAds);
+if (Platform.OS === 'ios') {
+  const g_hzEventEmitter = new NativeEventEmitter(RNHzAds);
 
-g_hzEventEmitter.addListener('HzEvent',(e) => {
-  g_eventEmitter.emit(e.name,e.body);
-});
+  g_hzEventEmitter.addListener('HzEvent',e => {
+    g_eventEmitter.emit(e.name,e.body);
+  });
+} else {
+  DeviceEventEmitter.addListener('HzEvent',e => {
+    g_eventEmitter.emit(e.name,e);
+  });
+}
 
 function once(event,callback) {
   g_eventEmitter.once(event,callback);

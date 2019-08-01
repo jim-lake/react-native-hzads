@@ -77,6 +77,7 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
 
   private void sendReactEvent(final String eventName,final String tag) {
     final WritableMap params = new WritableNativeMap();
+    params.putString("name",eventName);
     params.putString("tag",tag);
     sendReactEvent(eventName,params);
   }
@@ -84,10 +85,11 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
   private void sendReactEvent(final String eventName, @Nullable WritableMap params) {
     if (params == null) {
       params = new WritableNativeMap();
+      params.putString("name",eventName);
     }
     getReactApplicationContext()
       .getJSModule(RCTDeviceEventEmitter.class)
-      .emit(eventName, params);
+      .emit("HzEvent",params);
   }
 
   @Override

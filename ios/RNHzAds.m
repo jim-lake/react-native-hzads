@@ -84,6 +84,20 @@ RCT_EXPORT_METHOD(isInterstitialAvailable:(RCTResponseSenderBlock)callback) {
 RCT_EXPORT_METHOD(isInterstitialAvailableForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
   callback(@[[NSNull null],@([HZInterstitialAd isAvailableForTag:tag])]);
 }
+RCT_EXPORT_METHOD(fetchInterstitial:(RCTResponseSenderBlock)callback) {
+  [self fetchInterstitialForTag:@"default" callback:callback];
+}
+RCT_EXPORT_METHOD(fetchInterstitialForTag:(NSString *)tag callback:(RCTResponseSenderBlock)callback) {
+  [HZInterstitialAd fetchForTag:tag withCompletion:^(BOOL result,NSError *error) {
+    if (result) {
+      callback(@[[NSNull null]]);
+    } else if (error != nil) {
+      callback(@[error]);
+    } else {
+      callback(@[@"completion_failure"]);
+    }
+  }];
+}
 RCT_EXPORT_METHOD(showInterstitial:(RCTResponseSenderBlock)callback) {
   [self showInterstitialForTag:@"default" callback:callback];
 }

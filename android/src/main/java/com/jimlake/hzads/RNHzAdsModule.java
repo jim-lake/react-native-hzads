@@ -133,6 +133,16 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void fetchInterstitial(final Callback callback) {
+    this.fetchInterstitialForTag("default",callback);
+  }
+  @ReactMethod
+  public void fetchInterstitialForTag(final String tag,final Callback callback) {
+    InterstitialAd.fetch(tag);
+    callback.invoke((Object)null);
+  }
+
+  @ReactMethod
   public void isInterstitialAvailable(final Callback callback) {
     this.isInterstitialAvailableForTag("default",callback);
   }
@@ -140,8 +150,9 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
   public void isInterstitialAvailableForTag(final String tag,final Callback callback) {
     callback.invoke((Object)null,InterstitialAd.isAvailable(tag));
   }
+
   @ReactMethod
-  public void showInterstitial(final String tag,final Callback callback) {
+  public void showInterstitial(final Callback callback) {
     this.showInterstitialForTag("default",callback);
   }
   @ReactMethod

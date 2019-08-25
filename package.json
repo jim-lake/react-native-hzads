@@ -1,6 +1,6 @@
 {
   "name": "react-native-hzads",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "React Native Heyzap Ads Module",
   "main": "index.js",
   "scripts": {

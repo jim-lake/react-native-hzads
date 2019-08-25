@@ -43,6 +43,7 @@ function init(publisherId,done) {
 
 const getStatus = RNHzAds.getStatus;
 const showDebugPanel = RNHzAds.showDebugPanel;
+
 const isInterstitialAvailable = RNHzAds.isInterstitialAvailable;
 const isVideoAvailable = RNHzAds.isVideoAvailable;
 const isIncentivizedAdAvailable = RNHzAds.isIncentivizedAdAvailable;
@@ -58,8 +59,10 @@ function wrapMethod(method) {
 
 const fetchInterstitial = wrapMethod(RNHzAds.fetchInterstitial);
 const showInterstitial = wrapMethod(RNHzAds.showInterstitial);
+
 const fetchVideo = wrapMethod(RNHzAds.fetchVideo);
 const showVideo = wrapMethod(RNHzAds.showVideo);
+
 const fetchIncentivizedAd = wrapMethod(RNHzAds.fetchIncentivizedAd);
 const showIncentivizedAd = wrapMethod(RNHzAds.showIncentivizedAd);
 
@@ -68,14 +71,20 @@ export default {
   on,
   removeListener,
   init,
+
   getStatus,
   showDebugPanel,
+
   isInterstitialAvailable,
-  showInterstitial,
-  fetchVideo,
   isVideoAvailable,
-  showVideo,
-  fetchIncentivizedAd,
   isIncentivizedAdAvailable,
+
+  fetchInterstitial,
+  showInterstitial,
+
+  fetchVideo,
+  showVideo,
+
+  fetchIncentivizedAd,
   showIncentivizedAd,
 };

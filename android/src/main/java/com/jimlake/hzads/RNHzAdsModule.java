@@ -2,6 +2,8 @@ package com.jimlake.hzads;
 
 import javax.annotation.Nullable;
 
+import android.app.Activity;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -99,13 +101,17 @@ public class RNHzAdsModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void initWithPublisherID(final String publisherId,final Callback callback) {
-    HeyzapAds.start(publisherId, getCurrentActivity());
-    InterstitialAd.setOnStatusListener(statusListener);
-    VideoAd.setOnStatusListener(statusListener);
-    IncentivizedAd.setOnStatusListener(statusListener);
-    IncentivizedAd.setOnIncentiveResultListener(incentiveResultListener);
-
-    getStatus(callback);
+    final Activity activity = getCurrentActivity();
+    if (activity != null) {
+      HeyzapAds.start(publisherId,activity);
+      InterstitialAd.setOnStatusListener(statusListener);
+      VideoAd.setOnStatusListener(statusListener);
+      IncentivizedAd.setOnStatusListener(statusListener);
+      IncentivizedAd.setOnIncentiveResultListener(incentiveResultListener);
+      getStatus(callback);
+    } else {
+      callback.invoke("no_activity");
+    }
   }
 
   @ReactMethod

@@ -1,9 +1,9 @@
 
-# react-native-hz-ads
+# react-native-hzads
 
 ## Getting started
 
-`$ yarn add react-native-hz-ads`
+`$ yarn add react-native-hzads`
 
 
 #### iOS
@@ -21,7 +21,7 @@ maven { url 'https://fyber.bintray.com/fairbid-maven' }
 ## Usage
 
 ```javascript
-import RNHzAds from 'react-native-hz-ads';
+import RNHzAds from 'react-native-hzads';
 
 RNHzAds;
 ```
